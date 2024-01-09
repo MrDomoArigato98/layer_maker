@@ -18,11 +18,12 @@ create_layer() {
     pip install $PACKAGE_NAME -t $LAYER_DIR
 
     # Package into a zip file
-    ZIP_FILE="${PACKAGE_NAME}_lambda_layer.zip"
+    ZIP_FILE="layer.zip"
     echo "Packaging into $ZIP_FILE..."
     zip -r ./$ZIP_FILE $LAYER_DIR
     
-    sleep 5
+    sleep 1
+    
     # Upload Lambda layer
     echo "Creating Lambda layer $LAYER_NAME..."
     aws lambda publish-layer-version --layer-name $LAYER_NAME --compatible-runtimes $PYTHON_VERSION --zip-file fileb://$ZIP_FILE
@@ -30,5 +31,5 @@ create_layer() {
     echo "Lambda layer created and uploaded: $LAYER_NAME"
 }
 
-# Usage: ./create_layer.sh <package-name> [python-version] <layer-name>
+# Usage: ./create_layer.sh <package-name> <python-version> <layer-name>
 create_layer $1 $2 $3
